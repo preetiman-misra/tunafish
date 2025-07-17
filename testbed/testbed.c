@@ -2,9 +2,8 @@
 // Created by Preetiman Misra on 17/07/25.
 //
 #include <tunafish/tunafish.h>
+#include <tunafish/renderer/renderer.h>
 #include <stdio.h>
-
-#include "tunafish/renderer/renderer.h"
 
 void test_math_library(void) {
     TF_INFO("Testing math library...");
