@@ -7,6 +7,8 @@
 // Core engine includes
 #include "tunafish/core/types.h"
 #include "tunafish/core/export.h"
+#include "tunafish/core/log.h"
+#include "tunafish/core/math.h"
 #include "tunafish/platform/window.h"
 
 #ifdef __cplusplus

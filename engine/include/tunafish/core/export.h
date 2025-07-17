@@ -45,11 +45,11 @@ extern "C" {
 // Function attributes
 #define TF_INLINE static inline
 
-// Debug/release
+// Debug/release (renamed to avoid conflict with logging)
 #ifdef NDEBUG
-#define TF_DEBUG 0
+#define TF_IS_DEBUG 0
 #else
-#define TF_DEBUG 1
+#define TF_IS_DEBUG 1
 #endif
 
 #ifdef __cplusplus

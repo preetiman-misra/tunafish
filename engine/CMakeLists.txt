@@ -6,10 +6,9 @@ add_subdirectory(vendor/glfw)
 
 add_library(tunafish_engine SHARED
         src/tunafish.c
+        src/core/log.c
+        src/core/math.c
         src/platform/window.c
-        include/tunafish/core/types.h
-        include/tunafish/core/export.h
-        include/tunafish/platform/window.h
 )
 
 target_include_directories(tunafish_engine
