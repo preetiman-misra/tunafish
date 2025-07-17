@@ -4,6 +4,8 @@
 #include <tunafish/tunafish.h>
 #include <stdio.h>
 
+#include "tunafish/renderer/renderer.h"
+
 void test_math_library(void) {
     TF_INFO("Testing math library...");
     // Test vector operations
@@ -227,6 +229,35 @@ void test_input_interactive(TF_Window *window) {
     TF_INFO("Interactive input test completed");
 }
 
+void test_renderer_system(TF_Window *window) {
+    TF_INFO("Testing renderer system...");
+
+    // Create renderer config
+    TF_RendererConfig config = {
+        .backend = TF_RENDERER_BACKEND_OPENGL,
+        .enable_depth_test = TF_TRUE,
+        .enable_vsync = TF_TRUE,
+        .clear_color = TF_COLOR_BLUE
+    };
+
+    // Create renderer
+    TF_Renderer *renderer = tf_renderer_create(window, &config);
+    if (!renderer) {
+        TF_ERROR("Failed to create renderer");
+        return;
+    }
+
+    // test basic rendering pipeline
+    tf_renderer_begin_frame(renderer);
+    tf_renderer_clear(renderer, TF_CLEAR_ALL);
+    tf_renderer_end_frame(renderer);
+    tf_window_swap_buffers(window);
+
+    // Cleanup
+    tf_renderer_destroy(renderer);
+    TF_INFO("Renderer system tests complete.");
+}
+
 int main(void) {
     printf("Tunafish Engine Test with Input System\n");
     printf("======================================\n");
@@ -270,12 +301,21 @@ int main(void) {
     test_time_system();
     test_memory_system();
     test_input_system();
+    test_renderer_system(window);
 
     // Interactive input testing
     test_input_interactive(window);
 
     // Now run the normal main loop
     TF_INFO("Starting normal main loop...");
+    TF_RendererConfig config = {
+        .backend = TF_RENDERER_BACKEND_OPENGL,
+        .enable_depth_test = TF_TRUE,
+        .enable_vsync = TF_TRUE,
+        .clear_color = TF_COLOR_BLUE
+    };
+    TF_Renderer *renderer = tf_renderer_create(window, &config);
+
     int frame_count = 0;
     f64 last_fps_report = tf_time_get_current();
 
@@ -284,6 +324,13 @@ int main(void) {
         tf_input_update(); // Update input each frame
         tf_engine_run_frame(engine);
         tf_window_swap_buffers(window);
+
+        // Add rendering to main loop
+        tf_renderer_begin_frame(renderer);
+        tf_renderer_clear(renderer, TF_CLEAR_COLOR);
+        tf_renderer_end_frame(renderer);
+
+        // tf_window_swap_buffers(window);
         frame_count++;
 
         // Check for escape to exit
@@ -305,6 +352,8 @@ int main(void) {
             last_fps_report = current_time;
         }
     }
+
+    tf_renderer_destroy(renderer);
 
     // Final timing report
     f64 total_elapsed = tf_time_get_elapsed();
