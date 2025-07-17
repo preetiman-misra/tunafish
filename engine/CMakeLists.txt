@@ -16,7 +16,7 @@ add_library(tunafish_engine SHARED
         src/core/memory.c
         src/platform/input.c
         src/core/error.c
-        src/renderer/backend/gl_renderer.c
+        src/renderer/backend/opengl/gl_renderer.c
         src/renderer/renderer.c
 )
 
