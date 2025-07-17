@@ -4,6 +4,9 @@ set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 add_subdirectory(vendor/glfw)
 
+# GLAD
+add_subdirectory(vendor/glad)
+
 add_library(tunafish_engine SHARED
         src/tunafish.c
         src/core/log.c
@@ -13,6 +16,8 @@ add_library(tunafish_engine SHARED
         src/core/memory.c
         src/platform/input.c
         src/core/error.c
+        src/renderer/backend/gl_renderer.c
+        src/renderer/renderer.c
 )
 
 target_include_directories(tunafish_engine
@@ -20,7 +25,7 @@ target_include_directories(tunafish_engine
         PRIVATE src/ vendor/glfw/include
 )
 
-target_link_libraries(tunafish_engine PRIVATE glfw)
+target_link_libraries(tunafish_engine PRIVATE glfw glad)
 
 set_property(TARGET tunafish_engine PROPERTY C_STANDARD 11)
 set_property(TARGET tunafish_engine PROPERTY C_STANDARD_REQUIRED ON)

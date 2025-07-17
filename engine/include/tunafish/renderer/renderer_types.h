@@ -14,7 +14,7 @@ extern "C" {
 typedef enum {
     TF_RENDERER_BACKEND_OPENGL,
     TF_RENDERER_BACKEND_VULKAN
-} TF_RendererBackend;
+} TF_RendererBackendType;
 
 // Clear flags
 typedef enum {

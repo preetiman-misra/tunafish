@@ -20,7 +20,7 @@ typedef struct TF_Mesh TF_Mesh;
 
 // Renderer configuration
 typedef struct {
-    TF_RendererBackend backend;
+    TF_RendererBackendType backend;
     b32 enable_depth_test;
     b32 enable_vsync;
     TF_Color clear_color;
