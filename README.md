@@ -26,7 +26,7 @@ codebase like a big boy.
 
 ## Roadmap
 
-### ✅ COMPLETED (Solid Foundation)
+### ✅ COMPLETED
 
 - [x] **Core Systems** - Types, exports, logging, math library, time system
 - [x] **Platform Layer** - GLFW window management with OpenGL context
@@ -35,7 +35,50 @@ codebase like a big boy.
 
 ### 🎯 CURRENT FOCUS
 
-Working on the input system.
+#### **🎨 Renderer & Graphics Pipeline**
+
+#### **Rendering Strategy**
+
+Tunafish uses a **backend-abstracted renderer** with OpenGL as the primary implementation. The design prioritizes
+simplicity and learning over bleeding-edge features.
+
+##### **Core Philosophy:**
+
+- **Clean abstraction** - Game code never touches OpenGL directly
+- **Backend agnostic** - Vulkan support planned for future
+- **Education focused** - Clear, readable code over micro-optimizations
+- **Incremental complexity** - Start simple, add features as needed
+
+##### **Rendering Pipeline:**
+
+```
+Game Code → Renderer API → OpenGL Backend → GPU
+     ↓           ↓              ↓           ↓
+  Meshes    Draw Commands   GL Calls    Pixels
+Materials   State Changes   Buffers    Triangles
+Transforms    Batching      Shaders    Colors
+```
+
+##### **Current Renderer Features:**
+
+- [ ] **Basic geometry** - Triangles, cubes, custom meshes
+- [ ] **3D camera system** - Perspective projection with view matrices
+- [ ] **Shader abstraction** - Vertex/fragment shader compilation and uniforms
+- [ ] **Material system** - Color properties and basic texturing support
+- [ ] **State management** - Depth testing, clear operations, viewport control
+
+##### **Planned Features:**
+
+- [ ] **Texture loading** - PNG/JPG support with filtering options
+- [ ] **Batch rendering** - Multiple objects with same material
+- [ ] **Basic lighting** - Directional lights and ambient lighting
+- [ ] **Debug rendering** - Wireframe, normals, bounding boxes
+- [ ] **Vulkan backend** - Modern graphics API support
+
+The renderer is designed to get pixels on screen quickly while maintaining a clean API that can evolve with more
+advanced features.
+
+---
 
 ### 📋 TODO (Priority Order)
 
