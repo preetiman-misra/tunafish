@@ -42,9 +42,9 @@ int main(void) {
    tf_window_get_size(window, &width, &height);
    printf("✓ Window size: %u x %u\n", width, height);
    // Run main loop for a few seconds
-   printf("Running window for 3 seconds...\n");
+   printf("Running window for 5 seconds...\n");
    int frame_count = 0;
-   while (!tf_window_should_close(window) && frame_count < 180) {
+   while (!tf_window_should_close(window) && frame_count < 300) {
       // ~3 seconds at 60fps
       tf_window_poll_events(window);
       tf_engine_run_frame(engine);
