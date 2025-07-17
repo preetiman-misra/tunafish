@@ -7,6 +7,7 @@
 // Core engine includes
 #include "tunafish/core/types.h"
 #include "tunafish/core/export.h"
+#include "tunafish/platform/window.h"
 
 #ifdef __cplusplus
 extern "C" {

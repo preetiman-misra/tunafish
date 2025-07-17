@@ -1,14 +1,23 @@
+# Vendor
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+add_subdirectory(vendor/glfw)
+
 add_library(tunafish_engine SHARED
         src/tunafish.c
+        src/platform/window.c
         include/tunafish/core/types.h
         include/tunafish/core/export.h
+        include/tunafish/platform/window.h
 )
 
 target_include_directories(tunafish_engine
         PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-        PRIVATE src/
+        PRIVATE src/ vendor/glfw/include
 )
 
+target_link_libraries(tunafish_engine PRIVATE glfw)
 
 set_property(TARGET tunafish_engine PROPERTY C_STANDARD 11)
 set_property(TARGET tunafish_engine PROPERTY C_STANDARD_REQUIRED ON)
