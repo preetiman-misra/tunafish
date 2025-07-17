@@ -42,8 +42,8 @@ Working on the input system.
 #### **HIGH PRIORITY** (Do This Shit First)
 
 - [x] **Memory Management** - Arena allocator for engine/renderer (malloc everywhere is for amateurs)
-- [ ] **Input System** - Keyboard/mouse event processing (can't make games without input, genius)
-- [ ] **Error Handling** - Consistent error codes and propagation (because crashes are embarrassing)
+- [x] **Input System** - Keyboard/mouse event processing (can't make games without input, genius)
+- [x] **Error Handling** - Consistent error codes and propagation (because crashes are embarrassing)
 - [ ] **Renderer Abstraction** - OpenGL backend with clean API (the whole point of this engine)
 - [ ] **Basic Rendering** - Clear screen, draw triangles, basic shaders
 
