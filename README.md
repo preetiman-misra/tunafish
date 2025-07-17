@@ -35,13 +35,13 @@ codebase like a big boy.
 
 ### 🎯 CURRENT FOCUS
 
-Working on the renderer abstraction because everything else is for weaklings who can't prioritize.
+Working on the input system.
 
 ### 📋 TODO (Priority Order)
 
 #### **HIGH PRIORITY** (Do This Shit First)
 
-- [ ] **Memory Management** - Arena allocator for engine/renderer (malloc everywhere is for amateurs)
+- [x] **Memory Management** - Arena allocator for engine/renderer (malloc everywhere is for amateurs)
 - [ ] **Input System** - Keyboard/mouse event processing (can't make games without input, genius)
 - [ ] **Error Handling** - Consistent error codes and propagation (because crashes are embarrassing)
 - [ ] **Renderer Abstraction** - OpenGL backend with clean API (the whole point of this engine)

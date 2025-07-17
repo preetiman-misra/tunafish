@@ -10,6 +10,7 @@
 #include "tunafish/core/log.h"
 #include "tunafish/core/math.h"
 #include "tunafish/core/time.h"
+#include "tunafish/core/memory.h"
 #include "tunafish/platform/window.h"
 
 #ifdef __cplusplus

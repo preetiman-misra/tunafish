@@ -10,6 +10,7 @@ add_library(tunafish_engine SHARED
         src/core/math.c
         src/core/time.c
         src/platform/window.c
+        src/core/memory.c
 )
 
 target_include_directories(tunafish_engine

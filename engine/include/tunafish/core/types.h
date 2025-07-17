@@ -35,8 +35,8 @@ typedef i64 isize;
 #define TF_NULL ((void*)0)
 
 // Utility macros
-#define TF_ARRAY_COUNT(array) (sizeof(array) / sizeof((array)[0])
-#define TF_KILOBYTES(value) ((value) *1024LL)
+#define TF_ARRAY_COUNT(array) (sizeof(array) / sizeof((array)[0]))
+#define TF_KILOBYTES(value) ((value) * 1024LL)
 #define TF_MEGABYTES(value)   (TF_KILOBYTES(value) * 1024LL)
 #define TF_GIGABYTES(value)   (TF_MEGABYTES(value) * 1024LL)
 
