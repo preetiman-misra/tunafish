@@ -12,6 +12,7 @@ add_library(tunafish_engine SHARED
         src/platform/window.c
         src/core/memory.c
         src/platform/input.c
+        src/core/error.c
 )
 
 target_include_directories(tunafish_engine
