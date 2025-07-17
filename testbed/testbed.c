@@ -2,7 +2,6 @@
 // Created by Preetiman Misra on 17/07/25.
 //
 #include <tunafish/tunafish.h>
-#include <tunafish/renderer/renderer.h>
 #include <stdio.h>
 
 void test_math_library(void) {

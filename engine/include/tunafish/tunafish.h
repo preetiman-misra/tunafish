@@ -13,6 +13,7 @@
 #include "tunafish/core/memory.h"
 #include "tunafish/platform/window.h"
 #include "tunafish/platform/input.h"
+#include "tunafish/renderer/renderer.h"
 
 #ifdef __cplusplus
 extern "C" {
