@@ -54,9 +54,9 @@ simplicity and learning over bleeding-edge features.
 ```
 Game Code → Renderer API → OpenGL Backend → GPU
      ↓           ↓              ↓           ↓
-  Meshes    Draw Commands   GL Calls    Pixels
-Materials   State Changes   Buffers    Triangles
-Transforms    Batching      Shaders    Colors
+  Meshes    Draw Commands    GL Calls    Pixels
+Materials   State Changes    Buffers    Triangles
+Transforms    Batching       Shaders     Colors
 ```
 
 ##### **Current Renderer Features:**
