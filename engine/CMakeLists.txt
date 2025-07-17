@@ -8,6 +8,7 @@ add_library(tunafish_engine SHARED
         src/tunafish.c
         src/core/log.c
         src/core/math.c
+        src/core/time.c
         src/platform/window.c
 )
 

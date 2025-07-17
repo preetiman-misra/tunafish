@@ -48,6 +48,8 @@ TF_API b32 tf_engine_initialize(TF_Engine *engine) {
     TF_INFO("Initializing engine...");
     // Initialize logging system
     tf_log_init(TF_LOG_LEVEL_DEBUG, TF_LOG_OUTPUT_CONSOLE, TF_NULL);
+    // Initialize time system
+    tf_time_init();
     engine->initialized = TF_TRUE;
     engine->running = TF_TRUE;
     TF_INFO("Engine initialized successfully");
@@ -66,7 +68,8 @@ TF_API void tf_engine_shutdown(TF_Engine *engine) {
     TF_INFO("Shutting down engine...");
     engine->running = TF_FALSE;
     engine->initialized = TF_FALSE;
-
+    // Shutdown time system
+    tf_time_shutdown();
     // Shutdown logging last
     tf_log_shutdown();
 }
@@ -80,6 +83,9 @@ TF_API void tf_engine_run_frame(TF_Engine *engine) {
         return;
     }
 
+    // Update time system
+    tf_time_update();
+
     // TODO: Frame logic will go here
-    TF_DEBUG_TRACE("Running frame");
+    TF_DEBUG_TRACE("Running frame (delta: %.3fms)", tf_time_get_delta() * 1000.0f);
 }

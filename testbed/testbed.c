@@ -25,9 +25,31 @@ void test_math_library(void) {
    TF_INFO("Math library tests completed");
 }
 
+void test_time_system(void) {
+   TF_INFO("Testing time system...");
+   // Test basic time functions
+   f64 current_time = tf_time_get_current();
+   f64 elapsed = tf_time_get_elapsed();
+   u64 frame_count = tf_time_get_frame_count();
+   TF_DEBUG("Current time: %.3f seconds", current_time);
+   TF_DEBUG("Elapsed time: %.3f seconds", elapsed);
+   TF_DEBUG("Frame count: %llu", frame_count);
+   // Test target FPS
+   tf_time_set_target_fps(60.0f);
+   f32 target_fps = tf_time_get_target_fps();
+   TF_DEBUG("Target FPS set to: %.1f", target_fps);
+   // Test small sleep
+   TF_DEBUG("Testing 10ms sleep...");
+   f64 sleep_start = tf_time_get_current();
+   tf_time_sleep(0.01f); // 10ms
+   f64 sleep_end = tf_time_get_current();
+   TF_DEBUG("Sleep took: %.1fms", (sleep_end - sleep_start) * 1000.0);
+   TF_INFO("Time system tests completed");
+}
+
 int main(void) {
-   printf("Tunafish Engine Test with Math Library\n");
-   printf("=====================================\n");
+   printf("Tunafish Engine Test with Time System\n");
+   printf("====================================\n");
    // Test engine creation
    TF_Engine *engine = tf_engine_create();
    if (!engine) {
@@ -48,41 +70,74 @@ int main(void) {
       tf_engine_destroy(engine);
       return -1;
    }
-   // Initialize engine (this will start logging)
+   // Initialize engine (this will start logging and time system)
    if (!tf_engine_initialize(engine)) {
       printf("ERROR: Failed to initialize engine\n");
       tf_window_destroy(window);
       tf_engine_destroy(engine);
       return -1;
    }
-   // Test math library
+   // Test systems
    test_math_library();
-   // Now we can use logging
-   TF_INFO("Starting testbed main loop");
+   test_time_system();
+   // Now we can use logging and timing
+   TF_INFO("Starting testbed main loop with timing");
    // Test window size
    u32 width, height;
    tf_window_get_size(window, &width, &height);
    TF_DEBUG("Window size: %u x %u", width, height);
-   // Run main loop for a few seconds
-   TF_INFO("Running window for 3 seconds...");
+   // Enhanced main loop with timing
+   TF_INFO("Running window with proper timing...");
    int frame_count = 0;
-   while (!tf_window_should_close(window) && frame_count < 180) {
+   f64 last_fps_report = tf_time_get_current();
+   while (!tf_window_should_close(window) && frame_count < 300) {
+      // 5 seconds at 60fps
       tf_window_poll_events(window);
       tf_engine_run_frame(engine);
       tf_window_swap_buffers(window);
       frame_count++;
-      // Log every 60 frames (roughly every second)
-      if (frame_count % 60 == 0) {
-         TF_INFO("Rendered %d frames", frame_count);
+      // Report timing info every second
+      f64 current_time = tf_time_get_current();
+      if (current_time - last_fps_report >= 1.0) {
+         f32 fps = tf_time_get_fps();
+         f32 delta = tf_time_get_delta();
+         TF_INFO("Frame %d - FPS: %.1f, Delta: %.3fms", frame_count, fps, delta * 1000.0f);
+         last_fps_report = current_time;
       }
    }
-   TF_INFO("Main loop completed with %d frames", frame_count);
+   // Final timing report
+   f64 total_elapsed = tf_time_get_elapsed();
+   u64 total_frames = tf_time_get_frame_count();
+   f32 avg_fps = (f32) total_frames / (f32) total_elapsed;
+   TF_INFO("Main loop completed:");
+   TF_INFO("  Total frames: %llu", total_frames);
+   TF_INFO("  Total time: %.3f seconds", total_elapsed);
+   TF_INFO("  Average FPS: %.1f", avg_fps);
+   // Test frame rate limiting
+   TF_INFO("Testing frame rate limiting to 30 FPS...");
+   tf_time_set_target_fps(30.0f);
+   f64 limit_start = tf_time_get_current();
+   int limited_frames = 0;
+   while (limited_frames < 60) {
+      // 2 seconds at 30fps
+      if (tf_time_should_render()) {
+         tf_window_poll_events(window);
+         tf_engine_run_frame(engine);
+         tf_window_swap_buffers(window);
+         limited_frames++;
+      } else {
+         tf_time_sleep(0.001f); // 1ms sleep to prevent busy waiting
+      }
+   }
+   f64 limit_end = tf_time_get_current();
+   f32 limited_fps = (f32) limited_frames / (f32) (limit_end - limit_start);
+   TF_INFO("Limited FPS test: %.1f FPS (target was 30.0)", limited_fps);
 
    // Cleanup
    tf_engine_shutdown(engine);
    tf_window_destroy(window);
    tf_engine_destroy(engine);
 
-   printf("\nTest completed - check the colored log output above!\n");
+   printf("\nTest completed - check the detailed timing output above!\n");
    return 0;
 }
