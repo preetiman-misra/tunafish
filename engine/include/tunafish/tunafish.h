@@ -12,6 +12,7 @@
 #include "tunafish/core/time.h"
 #include "tunafish/core/memory.h"
 #include "tunafish/platform/window.h"
+#include "tunafish/platform/input.h"
 
 #ifdef __cplusplus
 extern "C" {

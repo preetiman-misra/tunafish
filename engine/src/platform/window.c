@@ -163,3 +163,11 @@ TF_API void tf_window_set_title(TF_Window *window, const char *title) {
 
     glfwSetWindowTitle(window->glfw_window, title);
 }
+
+TF_API GLFWwindow *tf_window_get_glfw_window(TF_Window *window) {
+    if (!window) {
+        TF_WARN("Attempted to get GLFW handle from null window");
+        return TF_NULL;
+    }
+    return window->glfw_window;
+}

@@ -121,9 +121,115 @@ void test_memory_system(void) {
     TF_INFO("Memory system tests completed");
 }
 
+void test_input_system(void) {
+    TF_INFO("Testing input system...");
+
+    // Test key name utility
+    TF_DEBUG("Key names: WASD = '%s', '%s', '%s', '%s'",
+             tf_input_get_key_name(TF_KEY_W),
+             tf_input_get_key_name(TF_KEY_A),
+             tf_input_get_key_name(TF_KEY_S),
+             tf_input_get_key_name(TF_KEY_D));
+
+    // Test key validation
+    TF_DEBUG("Key validation: TF_KEY_A valid = %s, TF_KEY_UNKNOWN valid = %s",
+             tf_input_is_key_valid(TF_KEY_A) ? "true" : "false",
+             tf_input_is_key_valid(TF_KEY_UNKNOWN) ? "true" : "false");
+
+    // Test mouse button validation
+    TF_DEBUG("Mouse button validation: LEFT valid = %s, button 99 valid = %s",
+             tf_input_is_mouse_button_valid(TF_MOUSE_BUTTON_LEFT) ? "true" : "false",
+             tf_input_is_mouse_button_valid(99) ? "true" : "false");
+
+    // Test initial cursor state
+    TF_DEBUG("Initial cursor state: visible = %s, locked = %s",
+             tf_input_is_cursor_visible() ? "true" : "false",
+             tf_input_is_cursor_locked() ? "true" : "false");
+
+    // Test text input state
+    TF_DEBUG("Text input enabled: %s",
+             tf_input_is_text_input_enabled() ? "true" : "false");
+
+    TF_INFO("Input system tests completed");
+}
+
+void test_input_interactive(TF_Window *window) {
+    TF_INFO("Starting interactive input test...");
+    TF_INFO("Instructions:");
+    TF_INFO("  - Press WASD keys to test keyboard input");
+    TF_INFO("  - Click mouse buttons to test mouse input");
+    TF_INFO("  - Move mouse to test position tracking");
+    TF_INFO("  - Scroll to test scroll wheel");
+    TF_INFO("  - Press ESCAPE to end test early");
+    TF_INFO("  - Test will run for 10 seconds");
+
+    f64 test_start = tf_time_get_current();
+    f64 last_report = test_start;
+
+    while (tf_time_get_current() - test_start < 10.0) {
+        tf_window_poll_events(window);
+        tf_input_update();
+
+        // Check for escape key to exit early
+        if (tf_input_was_key_just_pressed(TF_KEY_ESCAPE)) {
+            TF_INFO("Escape pressed - ending input test early");
+            break;
+        }
+
+        // Report input every 0.5 seconds
+        f64 current_time = tf_time_get_current();
+        if (current_time - last_report >= 0.5) {
+            // Check WASD keys
+            b32 w_pressed = tf_input_is_key_pressed(TF_KEY_W);
+            b32 a_pressed = tf_input_is_key_pressed(TF_KEY_A);
+            b32 s_pressed = tf_input_is_key_pressed(TF_KEY_S);
+            b32 d_pressed = tf_input_is_key_pressed(TF_KEY_D);
+
+            if (w_pressed || a_pressed || s_pressed || d_pressed) {
+                TF_INFO("Keys pressed: %s%s%s%s",
+                        w_pressed ? "W " : "",
+                        a_pressed ? "A " : "",
+                        s_pressed ? "S " : "",
+                        d_pressed ? "D " : "");
+            }
+
+            // Check mouse buttons
+            b32 left_pressed = tf_input_is_mouse_button_pressed(TF_MOUSE_BUTTON_LEFT);
+            b32 right_pressed = tf_input_is_mouse_button_pressed(TF_MOUSE_BUTTON_RIGHT);
+            b32 middle_pressed = tf_input_is_mouse_button_pressed(TF_MOUSE_BUTTON_MIDDLE);
+
+            if (left_pressed || right_pressed || middle_pressed) {
+                TF_INFO("Mouse buttons pressed: %s%s%s",
+                        left_pressed ? "LEFT " : "",
+                        right_pressed ? "RIGHT " : "",
+                        middle_pressed ? "MIDDLE " : "");
+            }
+
+            // Check mouse position and delta
+            TF_MousePos pos = tf_input_get_mouse_position();
+            TF_MousePos delta = tf_input_get_mouse_delta();
+            TF_DEBUG("Mouse: pos(%.1f, %.1f), delta(%.2f, %.2f)",
+                     pos.x, pos.y, delta.x, delta.y);
+
+            // Check scroll
+            TF_ScrollOffset scroll_delta = tf_input_get_scroll_delta();
+            if (scroll_delta.x != 0.0 || scroll_delta.y != 0.0) {
+                TF_INFO("Scroll delta: (%.2f, %.2f)", scroll_delta.x, scroll_delta.y);
+            }
+
+            last_report = current_time;
+        }
+
+        // Small sleep to prevent busy waiting
+        tf_time_sleep(0.001f);
+    }
+
+    TF_INFO("Interactive input test completed");
+}
+
 int main(void) {
-    printf("Tunafish Engine Test with Memory System\n");
-    printf("=======================================\n");
+    printf("Tunafish Engine Test with Input System\n");
+    printf("======================================\n");
 
     // Test engine creation
     TF_Engine *engine = tf_engine_create();
@@ -134,7 +240,7 @@ int main(void) {
 
     // Test window creation
     TF_WindowConfig window_config = {
-        .title = "Tunafish Test Window",
+        .title = "Tunafish Input Test Window",
         .width = 800,
         .height = 600,
         .resizable = TF_TRUE,
@@ -147,7 +253,7 @@ int main(void) {
         return -1;
     }
 
-    // Initialize engine (this will start logging, memory, and time systems)
+    // Initialize engine (this will start logging, memory, time, and input systems)
     if (!tf_engine_initialize(engine)) {
         printf("ERROR: Failed to initialize engine\n");
         tf_window_destroy(window);
@@ -155,36 +261,47 @@ int main(void) {
         return -1;
     }
 
+    // Initialize input system and set window
+    tf_input_init();
+    tf_input_set_window(window);
+
     // Test all systems
     test_math_library();
     test_time_system();
     test_memory_system();
+    test_input_system();
 
-    // Now we can use logging, timing, and memory systems
-    TF_INFO("Starting testbed main loop with all systems");
+    // Interactive input testing
+    test_input_interactive(window);
 
-    // Test window size
-    u32 width, height;
-    tf_window_get_size(window, &width, &height);
-    TF_DEBUG("Window size: %u x %u", width, height);
-
-    // Enhanced main loop with timing
-    TF_INFO("Running window with proper timing...");
+    // Now run the normal main loop
+    TF_INFO("Starting normal main loop...");
     int frame_count = 0;
     f64 last_fps_report = tf_time_get_current();
+
     while (!tf_window_should_close(window) && frame_count < 300) {
-        // 5 seconds at 60fps
         tf_window_poll_events(window);
+        tf_input_update(); // Update input each frame
         tf_engine_run_frame(engine);
         tf_window_swap_buffers(window);
         frame_count++;
+
+        // Check for escape to exit
+        if (tf_input_was_key_just_pressed(TF_KEY_ESCAPE)) {
+            TF_INFO("Escape pressed - exiting main loop");
+            break;
+        }
 
         // Report timing info every second
         f64 current_time = tf_time_get_current();
         if (current_time - last_fps_report >= 1.0) {
             f32 fps = tf_time_get_fps();
             f32 delta = tf_time_get_delta();
-            TF_INFO("Frame %d - FPS: %.1f, Delta: %.3fms", frame_count, fps, delta * 1000.0f);
+
+            // Show input state in FPS reports
+            TF_MousePos mouse_pos = tf_input_get_mouse_position();
+            TF_INFO("Frame %d - FPS: %.1f, Delta: %.3fms, Mouse: (%.0f,%.0f)",
+                    frame_count, fps, delta * 1000.0f, mouse_pos.x, mouse_pos.y);
             last_fps_report = current_time;
         }
     }
@@ -198,27 +315,8 @@ int main(void) {
     TF_INFO("  Total time: %.3f seconds", total_elapsed);
     TF_INFO("  Average FPS: %.1f", avg_fps);
 
-    // Test frame rate limiting
-    TF_INFO("Testing frame rate limiting to 30 FPS...");
-    tf_time_set_target_fps(30.0f);
-    f64 limit_start = tf_time_get_current();
-    int limited_frames = 0;
-    while (limited_frames < 60) {
-        // 2 seconds at 30fps
-        if (tf_time_should_render()) {
-            tf_window_poll_events(window);
-            tf_engine_run_frame(engine);
-            tf_window_swap_buffers(window);
-            limited_frames++;
-        } else {
-            tf_time_sleep(0.001f); // 1ms sleep to prevent busy waiting
-        }
-    }
-    f64 limit_end = tf_time_get_current();
-    f32 limited_fps = (f32) limited_frames / (f32) (limit_end - limit_start);
-    TF_INFO("Limited FPS test: %.1f FPS (target was 30.0)", limited_fps);
-
     // Cleanup
+    tf_input_shutdown();
     tf_engine_shutdown(engine);
     tf_window_destroy(window);
     tf_engine_destroy(engine);

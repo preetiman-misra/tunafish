@@ -6,11 +6,12 @@
 #include "tunafish/core/types.h"
 #include "tunafish/core/export.h"
 
-#ifdef __cplucplus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
-// Window handle
+// Forward declarations
+struct GLFWwindow; // Use struct forward declaration instead of typedef
 typedef struct TF_Window TF_Window;
 
 // Window configuration
@@ -37,6 +38,9 @@ TF_API void tf_window_get_size(TF_Window *window, u32 *width, u32 *height);
 
 TF_API void tf_window_set_title(TF_Window *window, const char *title);
 
-#ifdef __cplucplus
+// Internal API for input system
+TF_API struct GLFWwindow *tf_window_get_glfw_window(TF_Window *window);
+
+#ifdef __cplusplus
 }
 #endif
