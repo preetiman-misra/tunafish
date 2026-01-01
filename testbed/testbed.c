@@ -7,22 +7,22 @@
 void test_math_library(void) {
     TF_INFO("Testing math library...");
     // Test vector operations
-    TF_Vec3 v1 = tf_vec3_create(1.0f, 2.0f, 3.0f);
-    TF_Vec3 v2 = tf_vec3_create(4.0f, 5.0f, 6.0f);
-    TF_Vec3 v3 = tf_vec3_add(v1, v2);
+    const TF_Vec3 v1 = tf_vec3_create(1.0f, 2.0f, 3.0f);
+    const TF_Vec3 v2 = tf_vec3_create(4.0f, 5.0f, 6.0f);
+    const TF_Vec3 v3 = tf_vec3_add(v1, v2);
     TF_DEBUG("Vector addition: (1,2,3) + (4,5,6) = (%.1f,%.1f,%.1f)", v3.x, v3.y, v3.z);
 
     // Test matrix operations
-    TF_Mat4 identity = tf_mat4_identity();
-    TF_Mat4 translation = tf_mat4_translate(tf_vec3_create(10.0f, 20.0f, 30.0f));
-    TF_Mat4 result = tf_mat4_multiply(identity, translation);
+    const TF_Mat4 identity = tf_mat4_identity();
+    const TF_Mat4 translation = tf_mat4_translate(tf_vec3_create(10.0f, 20.0f, 30.0f));
+    const TF_Mat4 result = tf_mat4_multiply(identity, translation);
     TF_DEBUG("Translation matrix [12] = %.1f (should be 10.0)", result.m[12]);
     TF_DEBUG("Translation matrix [13] = %.1f (should be 20.0)", result.m[13]);
     TF_DEBUG("Translation matrix [14] = %.1f (should be 30.0)", result.m[14]);
 
     // Test angle conversion
-    f32 degrees = 90.0f;
-    f32 radians = tf_radians(degrees);
+    const f32 degrees = 90.0f;
+    const f32 radians = tf_radians(degrees);
     TF_DEBUG("90 degrees = %.3f radians", radians);
 
     TF_INFO("Math library tests completed");
@@ -32,23 +32,23 @@ void test_time_system(void) {
     TF_INFO("Testing time system...");
 
     // Test basic time functions
-    f64 current_time = tf_time_get_current();
-    f64 elapsed = tf_time_get_elapsed();
-    u64 frame_count = tf_time_get_frame_count();
+    const f64 current_time = tf_time_get_current();
+    const f64 elapsed = tf_time_get_elapsed();
+    const u64 frame_count = tf_time_get_frame_count();
     TF_DEBUG("Current time: %.3f seconds", current_time);
     TF_DEBUG("Elapsed time: %.3f seconds", elapsed);
     TF_DEBUG("Frame count: %llu", frame_count);
 
     // Test target FPS
     tf_time_set_target_fps(60.0f);
-    f32 target_fps = tf_time_get_target_fps();
+    const f32 target_fps = tf_time_get_target_fps();
     TF_DEBUG("Target FPS set to: %.1f", target_fps);
 
     // Test small sleep
     TF_DEBUG("Testing 10ms sleep...");
-    f64 sleep_start = tf_time_get_current();
+    const f64 sleep_start = tf_time_get_current();
     tf_time_sleep(0.01f); // 10ms
-    f64 sleep_end = tf_time_get_current();
+    const f64 sleep_end = tf_time_get_current();
     TF_DEBUG("Sleep took: %.1fms", (sleep_end - sleep_start) * 1000.0);
 
     TF_INFO("Time system tests completed");
@@ -163,7 +163,7 @@ void test_input_interactive(TF_Window *window) {
     TF_INFO("  - Press ESCAPE to end test early");
     TF_INFO("  - Test will run for 10 seconds");
 
-    f64 test_start = tf_time_get_current();
+    const f64 test_start = tf_time_get_current();
     f64 last_report = test_start;
 
     while (tf_time_get_current() - test_start < 10.0) {
@@ -177,13 +177,13 @@ void test_input_interactive(TF_Window *window) {
         }
 
         // Report input every 0.5 seconds
-        f64 current_time = tf_time_get_current();
+        const f64 current_time = tf_time_get_current();
         if (current_time - last_report >= 0.5) {
             // Check WASD keys
-            b32 w_pressed = tf_input_is_key_pressed(TF_KEY_W);
-            b32 a_pressed = tf_input_is_key_pressed(TF_KEY_A);
-            b32 s_pressed = tf_input_is_key_pressed(TF_KEY_S);
-            b32 d_pressed = tf_input_is_key_pressed(TF_KEY_D);
+            const b32 w_pressed = tf_input_is_key_pressed(TF_KEY_W);
+            const b32 a_pressed = tf_input_is_key_pressed(TF_KEY_A);
+            const b32 s_pressed = tf_input_is_key_pressed(TF_KEY_S);
+            const b32 d_pressed = tf_input_is_key_pressed(TF_KEY_D);
 
             if (w_pressed || a_pressed || s_pressed || d_pressed) {
                 TF_INFO("Keys pressed: %s%s%s%s",
@@ -194,9 +194,9 @@ void test_input_interactive(TF_Window *window) {
             }
 
             // Check mouse buttons
-            b32 left_pressed = tf_input_is_mouse_button_pressed(TF_MOUSE_BUTTON_LEFT);
-            b32 right_pressed = tf_input_is_mouse_button_pressed(TF_MOUSE_BUTTON_RIGHT);
-            b32 middle_pressed = tf_input_is_mouse_button_pressed(TF_MOUSE_BUTTON_MIDDLE);
+            const b32 left_pressed = tf_input_is_mouse_button_pressed(TF_MOUSE_BUTTON_LEFT);
+            const b32 right_pressed = tf_input_is_mouse_button_pressed(TF_MOUSE_BUTTON_RIGHT);
+            const b32 middle_pressed = tf_input_is_mouse_button_pressed(TF_MOUSE_BUTTON_MIDDLE);
 
             if (left_pressed || right_pressed || middle_pressed) {
                 TF_INFO("Mouse buttons pressed: %s%s%s",
@@ -206,8 +206,8 @@ void test_input_interactive(TF_Window *window) {
             }
 
             // Check mouse position and delta
-            TF_MousePos pos = tf_input_get_mouse_position();
-            TF_MousePos delta = tf_input_get_mouse_delta();
+            const TF_MousePos pos = tf_input_get_mouse_position();
+            const TF_MousePos delta = tf_input_get_mouse_delta();
             TF_DEBUG("Mouse: pos(%.1f, %.1f), delta(%.2f, %.2f)",
                      pos.x, pos.y, delta.x, delta.y);
 
@@ -231,7 +231,7 @@ void test_renderer_system(TF_Window *window) {
     TF_INFO("Testing renderer system...");
 
     // Create renderer config
-    TF_RendererConfig config = {
+    const TF_RendererConfig config = {
         .backend = TF_RENDERER_BACKEND_OPENGL,
         .enable_depth_test = TF_TRUE,
         .enable_vsync = TF_TRUE,
@@ -360,9 +360,9 @@ int main(void) {
     tf_renderer_destroy(renderer);
 
     // Final timing report
-    f64 total_elapsed = tf_time_get_elapsed();
-    u64 total_frames = tf_time_get_frame_count();
-    f32 avg_fps = (f32) total_frames / (f32) total_elapsed;
+    const f64 total_elapsed = tf_time_get_elapsed();
+    const u64 total_frames = tf_time_get_frame_count();
+    const f32 avg_fps = (f32) total_frames / (f32) total_elapsed;
     TF_INFO("Main loop completed:");
     TF_INFO("  Total frames: %llu", total_frames);
     TF_INFO("  Total time: %.3f seconds", total_elapsed);
