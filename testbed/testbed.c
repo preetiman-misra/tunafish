@@ -321,14 +321,20 @@ int main(void) {
         tf_window_poll_events(window);
         tf_input_update(); // Update input each frame
         tf_engine_run_frame(engine);
+
+        // Render a triangle
+        tf_renderer_begin_frame(renderer);
+        tf_renderer_clear(renderer, TF_CLEAR_ALL);
+
+        // Draw a colorful triangle in the center of the screen
+        TF_Vec3 p1 = tf_vec3_create( 0.0f,  0.5f, 0.0f);  // Top
+        TF_Vec3 p2 = tf_vec3_create(-0.5f, -0.5f, 0.0f);  // Bottom left
+        TF_Vec3 p3 = tf_vec3_create( 0.5f, -0.5f, 0.0f);  // Bottom right
+        tf_renderer_draw_triangle(renderer, p1, p2, p3, TF_COLOR_RED);
+
+        tf_renderer_end_frame(renderer);
         tf_window_swap_buffers(window);
 
-        // Add rendering to main loop
-        tf_renderer_begin_frame(renderer);
-        tf_renderer_clear(renderer, TF_CLEAR_COLOR);
-        tf_renderer_end_frame(renderer);
-
-        // tf_window_swap_buffers(window);
         frame_count++;
 
         // Check for escape to exit

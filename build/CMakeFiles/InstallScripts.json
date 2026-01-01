@@ -1,0 +1,12 @@
+{
+	"InstallScripts" : 
+	[
+		"/Users/bitthal/Repos/dev/tunafish/build/cmake_install.cmake",
+		"/Users/bitthal/Repos/dev/tunafish/build/engine/cmake_install.cmake",
+		"/Users/bitthal/Repos/dev/tunafish/build/engine/vendor/glfw/cmake_install.cmake",
+		"/Users/bitthal/Repos/dev/tunafish/build/engine/vendor/glfw/src/cmake_install.cmake",
+		"/Users/bitthal/Repos/dev/tunafish/build/engine/vendor/glad/cmake_install.cmake",
+		"/Users/bitthal/Repos/dev/tunafish/build/testbed/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

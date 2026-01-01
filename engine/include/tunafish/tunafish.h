@@ -5,14 +5,14 @@
 #pragma once
 
 // Core engine includes
-#include "tunafish/core/types.h"
 #include "tunafish/core/export.h"
 #include "tunafish/core/log.h"
 #include "tunafish/core/math.h"
-#include "tunafish/core/time.h"
 #include "tunafish/core/memory.h"
-#include "tunafish/platform/window.h"
+#include "tunafish/core/time.h"
+#include "tunafish/core/types.h"
 #include "tunafish/platform/input.h"
+#include "tunafish/platform/window.h"
 #include "tunafish/renderer/renderer.h"
 
 #ifdef __cplusplus

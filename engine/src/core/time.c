@@ -22,9 +22,11 @@ static struct {
     f32 delta_time;
     f64 elapsed_time;
     u64 frame_count;
-    // FPS tracking
-    f32 fps_history[60]; // Store last 60 FPS values
+    // FPS tracking (using running sum for O(1) calculation)
+    f32 fps_history[60];
     u32 fps_index;
+    f32 fps_sum;        // Running sum of fps_history values
+    u32 fps_count;      // Number of valid entries (0-60 during warmup)
     f32 current_fps;
     // Frame rate control
     f32 target_fps;
@@ -85,18 +87,6 @@ static void tf_time_sleep_platform(f32 seconds) {
 
 #endif
 
-// Calculate average FPS from history
-static f32 tf_time_calculate_fps(void) {
-    f32 sum = 0.0f;
-    u32 count = 0;
-    for (u32 i = 0; i < 60; i++) {
-        if (s_time_state.fps_history[i] > 0.0f) {
-            sum += s_time_state.fps_history[i];
-            count++;
-        }
-    }
-    return count > 0 ? sum / (f32) count : 0.0f;
-}
 
 // Public API implementation
 TF_API void tf_time_init(void) {
@@ -112,6 +102,8 @@ TF_API void tf_time_init(void) {
     s_time_state.elapsed_time = 0.0;
     s_time_state.frame_count = 0;
     s_time_state.fps_index = 0;
+    s_time_state.fps_sum = 0.0f;
+    s_time_state.fps_count = 0;
     s_time_state.current_fps = 0.0f;
     s_time_state.target_fps = 0.0f; // Unlimited by default
     s_time_state.target_frame_time = 0.0;
@@ -148,17 +140,24 @@ TF_API void tf_time_update(void) {
     if (s_time_state.delta_time > 0.1f) {
         s_time_state.delta_time = 0.1f; // Cap at 100ms
     }
-    // Update FPS
+    // Update FPS using O(1) running sum
     if (s_time_state.delta_time > 0.0001f) {
-        // Minimum 0.1ms delta
         f32 instant_fps = 1.0f / s_time_state.delta_time;
-        // Cap at reasonable maximum
         if (instant_fps > 10000.0f) {
             instant_fps = 10000.0f;
         }
+        // Subtract old value from sum, add new value
+        s_time_state.fps_sum -= s_time_state.fps_history[s_time_state.fps_index];
         s_time_state.fps_history[s_time_state.fps_index] = instant_fps;
+        s_time_state.fps_sum += instant_fps;
+        // Track count during warmup period
+        if (s_time_state.fps_count < 60) {
+            s_time_state.fps_count++;
+        }
         s_time_state.fps_index = (s_time_state.fps_index + 1) % 60;
-        s_time_state.current_fps = tf_time_calculate_fps();
+        s_time_state.current_fps = s_time_state.fps_count > 0
+            ? s_time_state.fps_sum / (f32)s_time_state.fps_count
+            : 0.0f;
     }
 }
 

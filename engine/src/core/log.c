@@ -97,11 +97,11 @@ TF_API void tf_log_message(TF_LogLevel level, const char *file, u32 line, const 
     tf_log_get_timestamp(timestamp, sizeof(timestamp));
     // Get filename without path
     const char *filename = tf_log_get_filename(file);
-    // Format the message
-    va_list args;
-    va_start(args, format);
+
     // Console output
     if (s_log_state.output_flags & TF_LOG_OUTPUT_CONSOLE) {
+        va_list args;
+        va_start(args, format);
         printf("%s[%s]%s [%s] %s:%u: ", s_log_level_colors[level],
                s_log_level_strings[level],
                s_color_reset,
@@ -111,20 +111,20 @@ TF_API void tf_log_message(TF_LogLevel level, const char *file, u32 line, const 
         vprintf(format, args);
         printf("\n");
         fflush(stdout);
+        va_end(args);
     }
     // File output
     if ((s_log_state.output_flags & TF_LOG_OUTPUT_FILE) && s_log_state.log_file) {
+        va_list args;
+        va_start(args, format);
         fprintf(s_log_state.log_file, "[%s] [%s] %s:%u: ",
                 s_log_level_strings[level],
                 timestamp,
                 filename,
                 line);
-
-        va_start(args, format); // Reset args for file output
         vfprintf(s_log_state.log_file, format, args);
         fprintf(s_log_state.log_file, "\n");
         fflush(s_log_state.log_file);
+        va_end(args);
     }
-
-    va_end(args);
 }

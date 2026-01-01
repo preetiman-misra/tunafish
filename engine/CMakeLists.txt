@@ -18,6 +18,7 @@ add_library(tunafish_engine SHARED
         src/core/error.c
         src/renderer/backend/opengl/gl_renderer.c
         src/renderer/renderer.c
+        src/renderer/shader.c
 )
 
 target_include_directories(tunafish_engine

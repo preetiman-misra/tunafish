@@ -28,10 +28,13 @@ codebase like a big boy.
 
 ### ✅ COMPLETED
 
-- [x] **Core Systems** - Types, exports, logging, math library, time system
+- [x] **Core Systems** - Types, exports, logging, math library (inlined), time system (O(1) FPS)
 - [x] **Platform Layer** - GLFW window management with OpenGL context
 - [x] **Engine Lifecycle** - Proper initialization/shutdown with resource management
 - [x] **Frame Timing** - Delta time, FPS monitoring, frame rate control
+- [x] **Memory System** - Arena, pool, stack allocators with usage tracking
+- [x] **Input System** - Keyboard, mouse, scroll with callbacks
+- [x] **Renderer** - OpenGL 3.3+ backend, shader compilation, triangle rendering
 
 ### 🎯 CURRENT FOCUS
 
@@ -61,11 +64,11 @@ Transforms    Batching       Shaders     Colors
 
 ##### **Current Renderer Features:**
 
-- [ ] **Basic geometry** - Triangles, cubes, custom meshes
+- [x] **Basic geometry** - Triangle rendering with vertex colors
 - [ ] **3D camera system** - Perspective projection with view matrices
-- [ ] **Shader abstraction** - Vertex/fragment shader compilation and uniforms
+- [x] **Shader abstraction** - Vertex/fragment shader compilation and uniforms
 - [ ] **Material system** - Color properties and basic texturing support
-- [ ] **State management** - Depth testing, clear operations, viewport control
+- [x] **State management** - Depth testing, clear operations, viewport control
 
 ##### **Planned Features:**
 
@@ -84,11 +87,11 @@ advanced features.
 
 #### **HIGH PRIORITY** (Do This Shit First)
 
-- [x] **Memory Management** - Arena allocator for engine/renderer (malloc everywhere is for amateurs)
+- [x] **Memory Management** - Arena, pool, and stack allocators with tracking (malloc everywhere is for amateurs)
 - [x] **Input System** - Keyboard/mouse event processing (can't make games without input, genius)
 - [x] **Error Handling** - Consistent error codes and propagation (because crashes are embarrassing)
-- [ ] **Renderer Abstraction** - OpenGL backend with clean API (the whole point of this engine)
-- [ ] **Basic Rendering** - Clear screen, draw triangles, basic shaders
+- [x] **Renderer Abstraction** - OpenGL backend with clean API (the whole point of this engine)
+- [x] **Basic Rendering** - Clear screen, draw triangles, shader compilation
 
 #### **MODERATE PRIORITY** (After You Get the Basics Right)
 
